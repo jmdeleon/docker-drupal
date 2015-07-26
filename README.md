@@ -1,8 +1,6 @@
 Drupal development with Docker
 ==============================
 
-[![](https://badge.imagelayers.io/wadmiraal/drupal.svg)](https://imagelayers.io/?images=wadmiraal/drupal:latest 'Get your own badge on imagelayers.io')
-
 Quick and easy to use Docker container for your *local Drupal development*. It contains a LAMP stack and an SSH server, along with an up to date version of Drush. It is based on [Debian Wheezy](https://wiki.debian.org/DebianWheezy).
 
 Summary
@@ -12,11 +10,14 @@ This image contains:
 
 * Apache 2.2
 * MySQL 5.5
+* PostgreSQL 9.1
+* SQLite 3.8
 * PHP 5.4
 * Drush 7.0
-* Drupal 7.38
+* Drupal 7.38 (optionally supports Drupal Web Experience Toolkit distribution)
 * Composer
 * PHPMyAdmin
+* Adminer
 * Blackfire
 
 When launching, the container will contain a fully-installed, ready to use Drupal site.
@@ -25,6 +26,7 @@ When launching, the container will contain a fully-installed, ready to use Drupa
 
 * Drupal: `admin:admin`
 * MySQL: `root:` (no password)
+* PostgreSQL: `postgres:postgres`
 * SSH: `root:root`
 
 ### Exposed ports
@@ -32,6 +34,7 @@ When launching, the container will contain a fully-installed, ready to use Drupa
 * 80 (Apache)
 * 22 (SSH)
 * 3306 (MySQL)
+* 5432 (PostgreSQL)
 
 ### Environment variables
 
@@ -52,7 +55,7 @@ Installation
 
 Clone the repository locally and build it:
 
-	git clone https://github.com/wadmiraal/docker-drupal.git
+	git clone https://github.com/jmdeleon/docker-drupal.git
 	cd docker-drupal
 	docker build -t yourname/drupal .
 
@@ -60,24 +63,24 @@ Clone the repository locally and build it:
 
 Get the image:
 
-	docker pull wadmiraal/drupal
+	docker pull (TODO)
 
 Running it
 ----------
 
 For optimum usage, map some local directories to the container for easier development. I personally create at least a `modules/` directory which will contain my custom modules. You can do the same for your themes.
 
-The container exposes its `80` port (Apache), its `3306` port (MySQL) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
+The container exposes its `80` port (Apache), its `3306` port (MySQL) , its `5432` port (PostgreSQL) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
 
 Here's an example just running the container and forwarding `localhost:8080` and `localhost:8022` to the container:
 
-	docker run -d -p 8080:80 -p 8022:22 -t wadmiraal/drupal
+	docker run -d -p 8080:80 -p 8022:22 -t yourname/drupal
 
 ### Writing code locally
 
 Here's an example running the container, forwarding port `8080` like before, but also mounting Drupal's `sites/all/modules/custom/` folder to my local `modules/` folder. I can then start writing code on my local machine, directly in this folder, and it will be available inside the container:
 
-	docker run -d -p 8080:80 -v `pwd`/modules:/var/www/sites/all/modules/custom -t wadmiraal/drupal
+	docker run -d -p 8080:80 -v `pwd`/modules:/var/www/sites/all/modules/custom -t yourname/drupal
 
 ### Using Drush
 
@@ -126,12 +129,18 @@ Or, shorthand:
 
 PHPMyAdmin is available at `/phpmyadmin`. The MySQL port `3306` is exposed. The root account for MySQL is `root` (no password).
 
+### PostgreSQL, SQLite and Adminer
+
+Adminer is copied to the web root at `/adminer.php`. Adminer can be used for MySQL, PostgreSQL and SQLite databases.
+
+The PostgreSQL port `5432` is exposed. The root account for PostgreSQL is `postgres` (password `postgres`).
+
 ### Blackfire
 
 [Blackfire](https://blackfire.io) is a free PHP profiling tool. It offers very detailed and comprehensive insight into your code. To use Blackfire, you must first register on the site. Once registered, you will get a *server ID* and a *server token*. You pass these to the container, and it will fire up Blackfire automatically.
 
 Example:
 
-	docker run -it --rm -e BLACKFIREIO_SERVER_ID="[your id here]" -e BLACKFIREIO_SERVER_TOKEN="[your token here]" -p 8022:22 -p 8080:80 wadmiraal/drupal
+	docker run -it --rm -e BLACKFIREIO_SERVER_ID="[your id here]" -e BLACKFIREIO_SERVER_TOKEN="[your token here]" -p 8022:22 -p 8080:80 yourname/drupal
 
 You can now start profiling your application.
