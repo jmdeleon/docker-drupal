@@ -45,28 +45,6 @@ RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/apache2/php.i
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/cli/php.ini
 RUN sed -i 's/memory_limit = 128M/memory_limit = 384M/' /etc/php5/apache2/php.ini
 
-# Setup Blackfire.
-# Get the sources and install the Debian packages.
-# We create our own start script. If the environment variables are set, we
-# simply start Blackfire in the foreground. If not, we create a dummy daemon
-# script that simply loops indefinitely. This is to trick Supervisor into
-# thinking the program is running and avoid unnecessary error messages.
-RUN wget -O - https://packagecloud.io/gpg.key | apt-key add -
-RUN echo "deb http://packages.blackfire.io/debian any main" > /etc/apt/sources.list.d/blackfire.list
-RUN apt-get update
-RUN apt-get install -y blackfire-agent blackfire-php
-RUN echo -e '#!/bin/bash\n\
-if [[ -z "$BLACKFIREIO_SERVER_ID" || -z "$BLACKFIREIO_SERVER_TOKEN" ]]; then\n\
-    while true; do\n\
-        sleep 1000\n\
-    done\n\
-else\n\
-    /usr/bin/blackfire-agent -server-id="$BLACKFIREIO_SERVER_ID" -server-token="$BLACKFIREIO_SERVER_TOKEN"\n\
-fi\n\
-' > /usr/local/bin/launch-blackfire
-RUN chmod +x /usr/local/bin/launch-blackfire
-RUN mkdir -p /var/run/blackfire
-
 # Setup Apache.
 # In order to run our Simpletest tests, we need to make Apache
 # listen on the same port as the one we forwarded. Because we use
@@ -114,7 +92,6 @@ RUN echo -e '[program:mysql]\ncommand=/usr/bin/pidproxy /var/run/mysqld/mysqld.p
 # Setup Supervisor PostgreSQL
 RUN echo -e '[program:postgresql]\nuser=postgres\nautorestart=true\ncommand=/usr/lib/postgresql/9.1/bin/postgres -D /var/lib/postgresql/9.1/main -c config_file=/etc/postgresql/9.1/main/postgresql.conf\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n' >> /etc/supervisor/supervisord.conf
-RUN echo -e '[program:blackfire]\ncommand=/usr/local/bin/launch-blackfire\n\n' >> /etc/supervisor/supervisord.conf
 
 # Download Drupal.
 RUN rm -rf /var/www

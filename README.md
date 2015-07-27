@@ -18,7 +18,6 @@ This image contains:
 * Composer
 * PHPMyAdmin
 * Adminer
-* Blackfire
 
 When launching, the container will contain a fully-installed, ready to use Drupal site.
 
@@ -38,10 +37,7 @@ When launching, the container will contain a fully-installed, ready to use Drupa
 
 ### Environment variables
 
-If you wish to enable [Blackfire](https://blackfire.io) for profiling, set the following environment variables:
-
-* `BLACKFIREIO_SERVER_ID`: Your Blackfire server ID
-* `BLACKFIREIO_SERVER_TOKEN`: Your Blackfire server token
+(None)
 
 Tutorial
 --------
@@ -134,13 +130,3 @@ PHPMyAdmin is available at `/phpmyadmin`. The MySQL port `3306` is exposed. The 
 Adminer is copied to the web root at `/adminer.php`. Adminer can be used for MySQL, PostgreSQL and SQLite databases.
 
 The PostgreSQL port `5432` is exposed. The root account for PostgreSQL is `postgres` (password `postgres`).
-
-### Blackfire
-
-[Blackfire](https://blackfire.io) is a free PHP profiling tool. It offers very detailed and comprehensive insight into your code. To use Blackfire, you must first register on the site. Once registered, you will get a *server ID* and a *server token*. You pass these to the container, and it will fire up Blackfire automatically.
-
-Example:
-
-	docker run -it --rm -e BLACKFIREIO_SERVER_ID="[your id here]" -e BLACKFIREIO_SERVER_TOKEN="[your token here]" -p 8022:22 -p 8080:80 yourname/drupal
-
-You can now start profiling your application.
