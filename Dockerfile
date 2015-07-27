@@ -108,6 +108,7 @@ RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites -R && \
 	mkdir /var/www/sites/all/modules/contrib -p && \
 	mkdir /var/www/sites/all/modules/custom && \
+	mkdir /var/www/sites/all/modules/features && \
 	mkdir /var/www/sites/all/themes/contrib -p && \
 	mkdir /var/www/sites/all/themes/custom && \
 	chown -R www-data:www-data /var/www/
