@@ -27,6 +27,7 @@ RUN apt-get install -y \
 	postgresql-client \
 	php5-pgsql \
 	php5-sqlite \
+	openjdk-7-jre-headless \
 	supervisor
 RUN apt-get clean
 
@@ -96,6 +97,8 @@ RUN echo -e '[program:mysql]\ncommand=/usr/bin/pidproxy /var/run/mysqld/mysqld.p
 RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n' >> /etc/supervisor/supervisord.conf
 # Setup Supervisor PostgreSQL
 RUN echo -e '[program:postgresql]\nuser=postgres\nautorestart=true\ncommand=/usr/lib/postgresql/9.1/bin/postgres -D /var/lib/postgresql/9.1/main -c config_file=/etc/postgresql/9.1/main/postgresql.conf\n\n' >> /etc/supervisor/supervisord.conf
+# Setup Supervisor Solr
+RUN echo -e '[program:solr]\ncommand=/usr/bin/java -Xmx512M -server -jar start.jar\ndirectory=/usr/share/solr/example\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 
 # Download Drupal.
 RUN rm -rf /var/www
@@ -117,6 +120,11 @@ RUN mkdir -p /var/www/sites/default/files && \
 RUN wget -c http://adminer.org/latest.php -O /var/www/adminer.php
 RUN echo '<?php phpinfo(); ?>' > /var/www/php-info.php
 
+# Setup Solr
+RUN wget -c http://archive.apache.org/dist/lucene/solr/4.9.1/solr-4.9.1.tgz -O /tmp/solr-4.9.1.tgz
+RUN cd /tmp && tar xzf solr-4.9.1.tgz && mv solr-4.9.1 /usr/share/solr
+RUN cd /usr/share/solr/example && /usr/bin/java -Xmx512M -server -jar start.jar &
+
 # Start MySQL
 RUN /etc/init.d/mysql start
 
@@ -126,5 +134,5 @@ RUN /etc/init.d/postgresql start
 # Install Drupal
 # RUN cd /var/www && drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin
 
-EXPOSE 80 3306 22 5432
+EXPOSE 80 3306 22 5432 8983
 CMD exec supervisord -n

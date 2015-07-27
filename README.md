@@ -18,6 +18,8 @@ This image contains:
 * Composer
 * PHPMyAdmin
 * Adminer
+* Apache Solr 4.9.1
+* nano and vim
 
 When launching, the container will contain a fully-installed, ready to use Drupal site.
 
@@ -34,6 +36,7 @@ When launching, the container will contain a fully-installed, ready to use Drupa
 * 22 (SSH)
 * 3306 (MySQL)
 * 5432 (PostgreSQL)
+* 8983 (Solr)
 
 ### Environment variables
 
@@ -66,11 +69,11 @@ Running it
 
 For optimum usage, map some local directories to the container for easier development. I personally create at least a `modules/` directory which will contain my custom modules. You can do the same for your themes.
 
-The container exposes its `80` port (Apache), its `3306` port (MySQL) , its `5432` port (PostgreSQL) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
+The container exposes its `80` port (Apache), its `3306` port (MySQL), its `5432` port (PostgreSQL), its `8983` port (Apache Solr) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
 
-Here's an example just running the container and forwarding `localhost:8080` and `localhost:8022` to the container:
+Here's an example just running the container and forwarding `localhost:8080` and `localhost:2222` and `localhost:8984` to the container:
 
-	docker run -d -p 8080:80 -p 8022:22 -t yourname/drupal
+	docker run -d -p 8080:80 -p 2222:22 -p 8984:8983 -t yourname/drupal
 
 ### Writing code locally
 
