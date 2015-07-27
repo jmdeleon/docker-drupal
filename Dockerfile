@@ -119,8 +119,8 @@ RUN echo -e '[program:blackfire]\ncommand=/usr/local/bin/launch-blackfire\n\n' >
 # Download Drupal.
 RUN rm -rf /var/www
 RUN cd /var && \
-# Download the stock Web Experience Toolkit Drupal distribution
-	drush dl wetkit && mv /var/wetkit* /var/www
+# Download the Web Experience Toolkit Drupal distribution
+	drush dl wetkit-7.x-4.x-dev && mv /var/wetkit* /var/www
 # Replace the line above with the line below to download the stock Drupal distribution
 #	drush dl drupal && mv /var/drupal* /var/www
 RUN mkdir -p /var/www/sites/default/files && \
