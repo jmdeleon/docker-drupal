@@ -41,9 +41,13 @@ RUN composer global update
 RUN ln -s /root/.composer/vendor/bin/drush /usr/local/bin/drush
 
 # Setup PHP.
-RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/apache2/php.ini
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/cli/php.ini
+RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/apache2/php.ini
 RUN sed -i 's/memory_limit = 128M/memory_limit = 384M/' /etc/php5/apache2/php.ini
+RUN sed -i 's/max_execution_time = 30/max_execution_time = 300/' /etc/php5/apache2/php.ini
+RUN sed -i 's/max_input_time = 60/max_input_time = 120/' /etc/php5/apache2/php.ini
+RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 300M/' /etc/php5/apache2/php.ini
+RUN echo 'apc.shm_size = 96M' >> /etc/php5/apache2/conf.d/20-apc.ini
 
 # Setup Apache.
 # In order to run our Simpletest tests, we need to make Apache
@@ -89,9 +93,9 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 # Setup Supervisor.
 RUN echo -e '[program:apache2]\ncommand=/bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:mysql]\ncommand=/usr/bin/pidproxy /var/run/mysqld/mysqld.pid /usr/sbin/mysqld\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n' >> /etc/supervisor/supervisord.conf
 # Setup Supervisor PostgreSQL
 RUN echo -e '[program:postgresql]\nuser=postgres\nautorestart=true\ncommand=/usr/lib/postgresql/9.1/bin/postgres -D /var/lib/postgresql/9.1/main -c config_file=/etc/postgresql/9.1/main/postgresql.conf\n\n' >> /etc/supervisor/supervisord.conf
-RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n' >> /etc/supervisor/supervisord.conf
 
 # Download Drupal.
 RUN rm -rf /var/www
@@ -110,6 +114,7 @@ RUN mkdir -p /var/www/sites/default/files && \
 
 # Setup Adminer - TODO (find a better directory for it)
 RUN wget -c http://adminer.org/latest.php -O /var/www/adminer.php
+RUN echo '<?php phpinfo(); ?>' > /var/www/php-info.php
 
 # Start MySQL
 RUN /etc/init.d/mysql start
