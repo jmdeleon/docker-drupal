@@ -116,9 +116,13 @@ RUN mkdir -p /var/www/sites/default/files && \
 	mkdir /var/www/sites/all/themes/custom && \
 	chown -R www-data:www-data /var/www/
 
-# Setup Adminer - TODO (find a better directory for it)
-RUN wget -c http://adminer.org/latest.php -O /var/www/adminer.php
-RUN echo '<?php phpinfo(); ?>' > /var/www/php-info.php
+# Setup Adminer
+RUN mkdir /usr/share/adminer
+RUN wget -c http://www.adminer.org/latest.php -O /usr/share/adminer/adminer.php
+RUN echo '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
+RUN echo -e 'Alias /php-info.php /usr/share/adminer/php-info.php' > /etc/apache2/mods-available/adminer.load
+RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/mods-available/adminer.load
+RUN a2enmod adminer && service apache2 restart
 
 # Setup Solr
 RUN wget -c http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz -O /tmp/solr-4.10.4.tgz
