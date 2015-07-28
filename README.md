@@ -18,7 +18,7 @@ This image contains:
 * Composer
 * PHPMyAdmin
 * Adminer
-* Apache Solr 4.9.1
+* Apache Solr 4.10.4
 * nano and vim
 
 When launching, the container will contain a fully-installed, ready to use Drupal site.
