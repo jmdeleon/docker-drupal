@@ -121,8 +121,8 @@ RUN wget -c http://adminer.org/latest.php -O /var/www/adminer.php
 RUN echo '<?php phpinfo(); ?>' > /var/www/php-info.php
 
 # Setup Solr
-RUN wget -c http://archive.apache.org/dist/lucene/solr/4.9.1/solr-4.9.1.tgz -O /tmp/solr-4.9.1.tgz
-RUN cd /tmp && tar xzf solr-4.9.1.tgz && mv solr-4.9.1 /usr/share/solr
+RUN wget -c http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz -O /tmp/solr-4.10.4.tgz
+RUN cd /tmp && tar xzf solr-4.10.4.tgz && mv solr-4.10.4 /usr/share/solr
 RUN cd /usr/share/solr/example && /usr/bin/java -Xmx512M -server -jar start.jar &
 
 # Start MySQL
