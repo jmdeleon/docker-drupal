@@ -18,6 +18,7 @@ This image contains:
 * Composer
 * Adminer 4.2
 * Apache Solr 4.10.4
+* Supervisor
 * nano and vim
 
 When launched, the container will contain a ready-to-install Drupal site, with no database configured. You need to create a database by using Adminer off the web root at `/adminer.php`, selecting one of PostgreSQL, MySQL or SQLite, before kicking off a Drupal install.
@@ -28,6 +29,7 @@ When launched, the container will contain a ready-to-install Drupal site, with n
 * MySQL: `root:` (no password)
 * PostgreSQL: `postgres:postgres`
 * SSH: `root:root`
+* Supervisor `supervisor:supervisor`
 
 ### Exposed ports
 
@@ -36,6 +38,7 @@ When launched, the container will contain a ready-to-install Drupal site, with n
 * 3306 (MySQL)
 * 5432 (PostgreSQL)
 * 8983 (Solr)
+* 9001 (Supervisor)
 
 Tutorial
 --------
@@ -68,11 +71,11 @@ Running it
 
 For optimum usage, map some local directories to the container for easier development. I personally create at least a `modules/` directory which will contain my custom modules. You can do the same for your themes.
 
-The container exposes its `80` port (Apache), its `3306` port (MySQL), its `5432` port (PostgreSQL), its `8983` port (Apache Solr) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
+The container exposes its `80` port (Apache), its `3306` port (MySQL), its `5432` port (PostgreSQL), its `8983` port (Apache Solr), its `9001` port (Supervisor) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
 
-Here's an example just running the container and forwarding `localhost:8080` and `localhost:2222` and `localhost:8984` to the container:
+Here's an example just running the container and forwarding `localhost:8080`, `localhost:2222`, `localhost:8984`, `localhost:9291` to the container:
 
-	docker run --rm --name youralias -p 8080:80 -p 2222:22 -p 8984:8983 -t yourname/drupal
+	docker run -d --name youralias -p 8080:80 -p 2222:22 -p 8984:8983 -p 9291:9001 -t yourname/drupal
 
 ### MySQL, PostgreSQL, SQLite and Adminer
 
@@ -81,6 +84,10 @@ The MySQL port `3306` is exposed. The root account for MySQL is `root` (no passw
 The PostgreSQL port `5432` is exposed. The root account for PostgreSQL is `postgres` (password `postgres`).
 
 Adminer is aliased to the web root at `/adminer.php`. Adminer can be used for MySQL, PostgreSQL and SQLite databases.
+
+### Supervisor
+
+Supervisor provides a rudimentary web UI over the port `9001` to manage several of the server processes (Apache, MySQL, PostgreSQL, sshd, Solr). It can be found over http `localhost:9291` in the above example, logging in with the id `supervisor` and the password also `supervisor`.
 
 ### Apache Solr
 
