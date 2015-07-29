@@ -16,11 +16,11 @@ This image contains:
 * Drush 7.0
 * Drupal 7.x, Web Experience Toolkit distribution 4.0, development edition (optionally supports current Drupal)
 * Composer
-* Adminer
+* Adminer 4.2
 * Apache Solr 4.10.4
 * nano and vim
 
-When launching, the container will contain a fully-installed, ready to use Drupal site.
+When launched, the container will contain a ready-to-install Drupal site, with no database configured. You need to create a database by using Adminer off the web root at `/adminer.php`, selecting one of PostgreSQL, MySQL or SQLite, before kicking off a Drupal install.
 
 ### Passwords
 
