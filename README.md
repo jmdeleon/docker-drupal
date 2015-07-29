@@ -47,6 +47,8 @@ Installation
 
 ### Github
 
+https://github.com/jmdeleon/docker-drupal
+
 Clone the repository locally and build it:
 
 	git clone https://github.com/jmdeleon/docker-drupal.git
@@ -54,6 +56,8 @@ Clone the repository locally and build it:
 	docker build -t yourname/drupal .
 
 ### Docker repository
+
+https://registry.hub.docker.com/u/jmdeleon/docker-drupal-wxt/
 
 Get the image:
 
