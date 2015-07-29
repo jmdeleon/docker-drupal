@@ -37,14 +37,10 @@ When launching, the container will contain a fully-installed, ready to use Drupa
 * 5432 (PostgreSQL)
 * 8983 (Solr)
 
-### Environment variables
-
-(None)
-
 Tutorial
 --------
 
-You can read more about this image [here](http://wadmiraal.net/lore/2015/03/27/use-docker-to-kickstart-your-drupal-development/).
+You can read more about the original image this is based on [here](http://wadmiraal.net/lore/2015/03/27/use-docker-to-kickstart-your-drupal-development/).
 
 Installation
 ------------
@@ -72,7 +68,19 @@ The container exposes its `80` port (Apache), its `3306` port (MySQL), its `5432
 
 Here's an example just running the container and forwarding `localhost:8080` and `localhost:2222` and `localhost:8984` to the container:
 
-	docker run -d -p 8080:80 -p 2222:22 -p 8984:8983 -t yourname/drupal
+	docker run --rm --name youralias -p 8080:80 -p 2222:22 -p 8984:8983 -t yourname/drupal
+
+### MySQL, PostgreSQL, SQLite and Adminer
+
+The MySQL port `3306` is exposed. The root account for MySQL is `root` (no password).
+
+The PostgreSQL port `5432` is exposed. The root account for PostgreSQL is `postgres` (password `postgres`).
+
+Adminer is aliased to the web root at `/adminer.php`. Adminer can be used for MySQL, PostgreSQL and SQLite databases.
+
+### Apache Solr
+
+Apache Solr 4.x is installed across port `8983`. If port `8983` is mapped as above, Solr is accessible via http `localhost:8984/solr`.
 
 ### Writing code locally
 
@@ -106,15 +114,3 @@ You should now be able to call:
 	drush @docker.wadmiraal_drupal cc all
 
 This will clear the cache of your Drupal site. All other commands will function as well.
-
-### MySQL, PostgreSQL, SQLite and Adminer
-
-The MySQL port `3306` is exposed. The root account for MySQL is `root` (no password).
-
-The PostgreSQL port `5432` is exposed. The root account for PostgreSQL is `postgres` (password `postgres`).
-
-Adminer is aliased to the web root at `/adminer.php`. Adminer can be used for MySQL, PostgreSQL and SQLite databases.
-
-### Apache Solr
-
-Apache Solr 4.x is installed across port `8983`. If port `8983` is mapped as above, Solr is accessible via http `localhost:8984/solr`.
