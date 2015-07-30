@@ -28,7 +28,7 @@ RUN apt-get install -y \
 	php5-sqlite \
 	openjdk-7-jre-headless \
 	supervisor
-RUN apt-get clean
+RUN apt-get autoremove && apt-get clean
 
 # Install Composer.
 RUN curl -sS https://getcomposer.org/installer | php
@@ -101,7 +101,7 @@ RUN rm -rf /var/www
 RUN cd /var && \
 # Download the Web Experience Toolkit Drupal distribution
 	drush dl wetkit-7.x-4.x-dev && mv /var/wetkit* /var/www
-# Replace the line above with the line below to download the stock Drupal distribution
+# Replace the line above with the line below to download the stock Drupal core distribution
 #	drush dl drupal && mv /var/drupal* /var/www
 RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites -R && \
@@ -115,7 +115,7 @@ RUN mkdir -p /var/www/sites/default/files && \
 # Setup Adminer
 RUN mkdir /usr/share/adminer
 RUN wget -c http://www.adminer.org/latest.php -O /usr/share/adminer/adminer.php
-RUN echo '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
+RUN echo -e '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
 RUN echo -e 'Alias /php-info.php /usr/share/adminer/php-info.php' > /etc/apache2/mods-available/adminer.load
 RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/mods-available/adminer.load
 RUN a2enmod adminer && service apache2 restart
@@ -134,5 +134,6 @@ RUN /etc/init.d/postgresql start
 # Install Drupal
 # RUN cd /var/www && drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin
 
+# Expose application ports and start Supervisor to manage service applications
 EXPOSE 80 3306 22 5432 8983 9001
 CMD exec supervisord -n

@@ -11,14 +11,14 @@ This image contains:
 * Apache 2.2
 * MySQL 5.5
 * PostgreSQL 9.1
-* SQLite 3.8
+* SQLite 3.7
 * PHP 5.4
+* Drupal 7.x, [Web Experience Toolkit distribution](http://drupal.org/) 4.0, development edition (optionally supports current Drupal)
 * Drush 7.0
-* Drupal 7.x, Web Experience Toolkit distribution 4.0, development edition (optionally supports current Drupal)
-* Composer
-* Adminer 4.2
 * Apache Solr 4.10.4
-* Supervisor
+* [Composer](https://getcomposer.org/)
+* [Adminer](http://www.adminer.org/) 4.2
+* [Supervisor](http://supervisord.org/)
 * nano and vim
 
 When launched, the container will contain a ready-to-install Drupal site, with no database configured. You need to create a database by using Adminer off the web root at `/adminer.php`, selecting one of PostgreSQL, MySQL or SQLite, before kicking off a Drupal install.
@@ -79,11 +79,11 @@ Here's an example just running the container and forwarding `localhost:8080`, `l
 
 ### MySQL, PostgreSQL, SQLite and Adminer
 
+Adminer can be used for MySQL, PostgreSQL and SQLite databases. Adminer is aliased to the web root at `/adminer.php`.
+
 The MySQL port `3306` is exposed. The root account for MySQL is `root` (no password).
 
 The PostgreSQL port `5432` is exposed. The root account for PostgreSQL is `postgres` (password `postgres`).
-
-Adminer is aliased to the web root at `/adminer.php`. Adminer can be used for MySQL, PostgreSQL and SQLite databases.
 
 ### Supervisor
 
