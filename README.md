@@ -79,7 +79,7 @@ Here's an example just running the container and forwarding `localhost:8080`, `l
 
 ### MySQL, PostgreSQL, SQLite and Adminer
 
-Adminer can be used for MySQL, PostgreSQL and SQLite databases. Adminer is aliased to the web root at `/adminer.php`.
+Adminer can be used to administer MySQL, PostgreSQL and SQLite databases. Adminer is aliased to the web root at `/adminer.php`.
 
 The MySQL port `3306` is exposed. The root account for MySQL is `root` (no password).
 
