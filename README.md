@@ -13,7 +13,7 @@ This image contains:
 * PostgreSQL 9.1
 * SQLite 3.7
 * PHP 5.4
-* Drupal 7.x, [Web Experience Toolkit distribution](http://drupal.org/) 4.0, development edition (optionally supports current Drupal)
+* Drupal 7.x, [Web Experience Toolkit distribution](https://www.drupal.org/project/wetkit) 4.0, development edition (optionally supports current Drupal)
 * Drush 7.0
 * Apache Solr 4.10.4
 * [Composer](https://getcomposer.org/)
@@ -21,7 +21,7 @@ This image contains:
 * [Supervisor](http://supervisord.org/)
 * nano and vim
 
-When launched, the container will contain a ready-to-install Drupal site, with no database configured. You need to create a database by using Adminer off the web root at `/adminer.php`, selecting one of PostgreSQL, MySQL or SQLite, before kicking off a Drupal install.
+When launched, the container will contain a ready-to-install Drupal distribution, with no database configured. You need to first create a database by using Adminer off the web root at `/adminer.php`, then select one of PostgreSQL, MySQL or SQLite as a database, when kicking off a Drupal install.
 
 ### Passwords
 
@@ -43,7 +43,7 @@ When launched, the container will contain a ready-to-install Drupal site, with n
 Tutorial
 --------
 
-You can read more about the original image this is based on [here](http://wadmiraal.net/lore/2015/03/27/use-docker-to-kickstart-your-drupal-development/).
+You can read more about the original container this is based on [here](http://wadmiraal.net/lore/2015/03/27/use-docker-to-kickstart-your-drupal-development/).
 
 Installation
 ------------
@@ -66,8 +66,8 @@ Get the image:
 
 	docker pull jmdeleon/docker-drupal-wxt
 
-Running it
-----------
+Running the container
+---------------------
 
 For optimum usage, map some local directories to the container for easier development. I personally create at least a `modules/` directory which will contain my custom modules. You can do the same for your themes.
 
@@ -92,6 +92,9 @@ Supervisor provides a rudimentary web UI over the port `9001` to manage several 
 ### Apache Solr
 
 Apache Solr 4.x is installed across port `8983`. If port `8983` is mapped as above, Solr is accessible via http `localhost:8984/solr`.
+
+Developing in this container
+----------------------------
 
 ### Writing code locally
 
