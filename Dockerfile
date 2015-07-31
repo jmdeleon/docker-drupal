@@ -59,6 +59,7 @@ RUN sed -i 's/memory_limit = 128M/memory_limit = 384M/' /etc/php5/apache2/php.in
 RUN sed -i 's/max_execution_time = 30/max_execution_time = 600/' /etc/php5/apache2/php.ini
 RUN sed -i 's/max_input_time = 60/max_input_time = 120/' /etc/php5/apache2/php.ini
 RUN sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 300M/' /etc/php5/apache2/php.ini
+RUN sed -i 's/;date.timezone =/date.timezone = "UTC"/' /etc/php5/apache2/php.ini
 
 # Setup Apache.
 # In order to run our Simpletest tests, we need to make Apache
