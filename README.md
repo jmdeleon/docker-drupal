@@ -9,17 +9,17 @@ Summary
 This image contains:
 
 * Apache 2.2
-* MySQL 5.5
-* PostgreSQL 9.1
+* MySQL 5.6
+* PostgreSQL 9.4
 * SQLite 3.7
-* PHP 5.4
+* PHP 5.6
 * Drupal 7.x, [Web Experience Toolkit distribution](https://www.drupal.org/project/wetkit) 4.0, development edition (optionally supports current Drupal)
 * Drush 7.0
 * Apache Solr 4.10.4
 * [Composer](https://getcomposer.org/)
 * [Adminer](http://www.adminer.org/) 4.2
 * [Supervisor](http://supervisord.org/)
-* nano and vim
+* nano, vim, git and mercurial (hg)
 
 When launched, the container will contain a ready-to-install Drupal distribution, with no database configured. You need to first create a database by using Adminer off the web root at `/adminer.php`, then select one of PostgreSQL, MySQL or SQLite as a database, when kicking off a Drupal install.
 
