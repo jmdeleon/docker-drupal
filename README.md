@@ -1,7 +1,7 @@
 Drupal development with Docker
 ==============================
 
-Quick and easy to use Docker container for your *local Drupal development*. It contains a LAMP stack and an SSH server, along with an up to date version of Drush. It is based on [Debian Wheezy](https://wiki.debian.org/DebianWheezy).
+Quick and easy to use Docker container for your local Drupal development. It contains a LAMP stack and an SSH server, along with an up to date version of Drush. It is based on [Debian Wheezy](https://wiki.debian.org/DebianWheezy).
 
 Summary
 -------
@@ -19,7 +19,7 @@ This image contains:
 * [Composer](https://getcomposer.org/)
 * [Adminer](http://www.adminer.org/) 4.2
 * [Supervisor](http://supervisord.org/)
-* nano, vim, git and mercurial (hg)
+* nano, vim, git and Mercurial (hg)
 
 When launched, the container will contain a ready-to-install Drupal distribution, with no database configured. You need to first create a database by using Adminer off the web root at `/adminer.php`, then select one of PostgreSQL, MySQL or SQLite as a database, when kicking off a Drupal install.
 
@@ -50,7 +50,7 @@ Installation
 
 ### Github
 
-https://github.com/jmdeleon/docker-drupal
+[https://github.com/jmdeleon/docker-drupal](https://github.com/jmdeleon/docker-drupal)
 
 Clone the repository locally and build it:
 
@@ -60,7 +60,7 @@ Clone the repository locally and build it:
 
 ### Docker repository
 
-https://registry.hub.docker.com/u/jmdeleon/docker-drupal-wxt/
+[https://registry.hub.docker.com/u/jmdeleon/docker-drupal-wxt/](https://registry.hub.docker.com/u/jmdeleon/docker-drupal-wxt/)
 
 Get the image:
 
@@ -101,6 +101,8 @@ Developing in this container
 Here's an example running the container, forwarding port `8080` like before, but also mounting Drupal's `sites/all/modules/custom/` folder to my local `modules/` folder. I can then start writing code on my local machine, directly in this folder, and it will be available inside the container:
 
 	docker run -d -p 8080:80 -v `pwd`/modules:/var/www/sites/all/modules/custom -t yourname/drupal
+
+For Windows users, replace the backquoted pwd modules directory above with the full path to your modules directory.
 
 ### Using Drush
 
