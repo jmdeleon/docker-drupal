@@ -46,8 +46,8 @@ RUN apt-get autoremove && apt-get clean
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
-# Install Drush 7.
-RUN composer global require drush/drush:7.*
+# Install Drush dev-master
+RUN composer global require drush/drush:dev-master
 RUN composer global update
 # Unfortunately, adding the composer vendor dir to the PATH doesn't seem to work. So:
 RUN ln -s /root/.composer/vendor/bin/drush /usr/local/bin/drush

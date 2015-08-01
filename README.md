@@ -14,7 +14,7 @@ This image contains:
 * SQLite 3.7
 * PHP 5.6
 * Drupal 7.x, [Web Experience Toolkit distribution](https://www.drupal.org/project/wetkit) 4.0, development edition (optionally supports current Drupal)
-* Drush 7.0
+* Drush dev-master version
 * Apache Solr 4.10.4
 * [Composer](https://getcomposer.org/)
 * [Adminer](http://www.adminer.org/) 4.2
