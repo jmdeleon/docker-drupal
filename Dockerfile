@@ -77,7 +77,7 @@ RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/' /etc/
 RUN echo "host all  all    0.0.0.0/0  md5" >> /etc/postgresql/9.4/main/pg_hba.conf
 RUN echo "listen_addresses='*'" >> /etc/postgresql/9.4/main/postgresql.conf
 
-# there might be a docker bug that postgresql could access 
+# there might be a docker bug that postgresql could access
 # /etc/ssl/private/ssl-cert-snakeoil.key
 RUN sed -i "s/ssl = true/ssl = false/g" /etc/postgresql/9.4/main/postgresql.conf
 
@@ -133,7 +133,7 @@ RUN service apache2 restart
 
 # Setup Solr
 RUN wget -c http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz -O /tmp/solr-4.10.4.tgz
-RUN cd /tmp && tar xzf solr-4.10.4.tgz && mv solr-4.10.4 /usr/share/solr
+RUN cd /tmp && tar xzf solr-4.10.4.tgz && mv solr-4.10.4 /usr/share/solr && rm /tmp/solr-4.10.4.tgz
 RUN cd /usr/share/solr/example && /usr/bin/java -Xmx512M -server -jar start.jar &
 
 # Start MySQL
