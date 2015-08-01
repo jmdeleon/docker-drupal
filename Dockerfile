@@ -137,13 +137,13 @@ RUN /etc/init.d/mysql start
 # Start PostgreSQL
 RUN /etc/init.d/postgresql start
 
-# Install Drupal
-# RUN cd /var/www && drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin
-
 # Setup Solr
 RUN wget -c http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz -O /tmp/solr-4.10.4.tgz
 RUN cd /tmp && tar xzf solr-4.10.4.tgz && mv solr-4.10.4 /usr/share/solr && rm /tmp/solr-4.10.4.tgz
 RUN cd /usr/share/solr/example && /usr/bin/java -Xmx512M -server -jar start.jar &
+
+# Install Drupal
+# RUN cd /var/www && drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin
 
 # Expose application ports and start Supervisor to manage service applications
 EXPOSE 80 3306 22 5432 8983 9001
