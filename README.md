@@ -17,7 +17,7 @@ This image contains:
 * Drush dev-master version
 * Apache Solr 4.10.4
 * [Composer](https://getcomposer.org/)
-* [Adminer](http://www.adminer.org/) 4.2
+* [Adminer](http://www.adminer.org/) 4.2.1
 * [Supervisor](http://supervisord.org/)
 * nano, vim, git and Mercurial (hg)
 
@@ -43,14 +43,20 @@ When launched, the container will contain a ready-to-install Drupal distribution
 Tutorial
 --------
 
-You can read more about the original container this is based on [here](http://wadmiraal.net/lore/2015/03/27/use-docker-to-kickstart-your-drupal-development/).
+This container is based on a container originally found here:
+
+https://github.com/wadmiraal/docker-drupal
+
+You can read more about the original container this is based on here: 
+
+http://wadmiraal.net/lore/2015/03/27/use-docker-to-kickstart-your-drupal-development/
 
 Installation
 ------------
 
 ### Github
 
-[https://github.com/jmdeleon/docker-drupal](https://github.com/jmdeleon/docker-drupal)
+https://github.com/jmdeleon/docker-drupal
 
 Clone the repository locally and build it:
 
@@ -60,7 +66,7 @@ Clone the repository locally and build it:
 
 ### Docker repository
 
-[https://registry.hub.docker.com/u/jmdeleon/docker-drupal-wxt/](https://registry.hub.docker.com/u/jmdeleon/docker-drupal-wxt/)
+https://registry.hub.docker.com/u/jmdeleon/docker-drupal-wxt/
 
 Get the image:
 
@@ -75,7 +81,7 @@ The container exposes its `80` port (Apache), its `3306` port (MySQL), its `5432
 
 Here's an example just running the container and forwarding `localhost:8080`, `localhost:2222`, `localhost:8984`, `localhost:9291` to the container:
 
-	docker run -d --name youralias -p 8080:80 -p 2222:22 -p 8984:8983 -p 9291:9001 -t yourname/drupal
+	docker run --rm --name youralias -p 8080:80 -p 2222:22 -p 8984:8983 -p 9201:9001 yourname/drupal
 
 ### MySQL, PostgreSQL, SQLite and Adminer
 
@@ -87,46 +93,8 @@ The PostgreSQL port `5432` is exposed. The root account for PostgreSQL is `postg
 
 ### Supervisor
 
-Supervisor provides a rudimentary web UI over the port `9001` to manage several of the server processes (Apache, MySQL, PostgreSQL, sshd, Solr). It can be found over http `localhost:9291` in the above example, logging in with the id `supervisor` and the password also `supervisor`.
+Supervisor provides a rudimentary web UI over the port `9001` to manage several of the server processes (Apache, MySQL, PostgreSQL, sshd, Solr). It can be found over http `localhost:9201` in the above example, logging in with the id `supervisor` and the password also `supervisor`.
 
 ### Apache Solr
 
 Apache Solr 4.x is installed across port `8983`. If port `8983` is mapped as above, Solr is accessible via http `localhost:8984/solr`.
-
-Developing in this container
-----------------------------
-
-### Writing code locally
-
-Here's an example running the container, forwarding port `8080` like before, but also mounting Drupal's `sites/all/modules/custom/` folder to my local `modules/` folder. I can then start writing code on my local machine, directly in this folder, and it will be available inside the container:
-
-	docker run -d -p 8080:80 -v `pwd`/modules:/var/www/sites/all/modules/custom -t yourname/drupal
-
-For Windows users, replace the backquoted pwd modules directory above with the full path to your modules directory.
-
-### Using Drush
-
-Using Drush aliases, I can directly execute Drush commands locally and have them be executed inside the container. Create a new aliases file in your home directory and add the following:
-
-	# ~/.drush/docker.aliases.drushrc.php
-	<?php
-	$aliases['wadmiraal_drupal'] = array(
-	  'root' => '/var/www',
-	  'remote-user' => 'root',
-	  'remote-host' => 'localhost',
-	  'ssh-options' => '-p 8022', // Or any other port you specify when running the container
-	);
-
-Next, if you do not wish to type the root password everytime you run a Drush command, copy the content of your local SSH public key (usually `~/.ssh/id_rsa.pub`; read [here](https://help.github.com/articles/generating-ssh-keys/) on how to generate one if you don't have it). SSH into the running container:
-
-	# If you forwarded another port than 8022, change accordingly.
-	# Password is "root".
-	ssh root@localhost -p 8022
-
-Once you're logged in, add the contents of your `id_rsa.pub` file to `/root/.ssh/authorized_keys`. Exit.
-
-You should now be able to call:
-
-	drush @docker.wadmiraal_drupal cc all
-
-This will clear the cache of your Drupal site. All other commands will function as well.
