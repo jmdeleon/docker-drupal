@@ -40,17 +40,6 @@ When launched, the container will contain a ready-to-install Drupal distribution
 * 8983 (Solr)
 * 9001 (Supervisor)
 
-Tutorial
---------
-
-This container is based on a container originally found here:
-
-https://github.com/wadmiraal/docker-drupal
-
-You can read more about the original container this is based on here: 
-
-http://wadmiraal.net/lore/2015/03/27/use-docker-to-kickstart-your-drupal-development/
-
 Installation
 ------------
 
@@ -96,3 +85,14 @@ Supervisor provides a rudimentary web UI over the port `9001` to manage several 
 ### Apache Solr
 
 Apache Solr 4.x is installed across port `8983`. If port `8983` is mapped as above, Solr is accessible via http `localhost:8984/solr`.
+
+Tutorial
+--------
+
+This container is based on a container originally found here:
+
+https://github.com/wadmiraal/docker-drupal
+
+You can read more about the original container this is based on here: 
+
+http://wadmiraal.net/lore/2015/03/27/use-docker-to-kickstart-your-drupal-development/
