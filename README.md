@@ -14,11 +14,11 @@ This image contains:
 * SQLite 3.7
 * PHP 5.6
 * Drupal 7.x, [Web Experience Toolkit distribution](https://www.drupal.org/project/wetkit) 4.0, development edition (optionally supports current Drupal)
+* [Composer](https://getcomposer.org/)
 * Drush dev-master version
 * Apache Solr 4.10.4
-* [Composer](https://getcomposer.org/)
-* [Adminer](http://www.adminer.org/) 4.2.1
-* [Supervisor](http://supervisord.org/)
+* Adminer latest
+* Supervisor
 * nano, vim, git and Mercurial (hg)
 
 When launched, the container will contain a ready-to-install Drupal distribution, with no database configured. You need to first create a database by using Adminer off the web root at `/adminer.php`, then select one of PostgreSQL, MySQL or SQLite as a database, when kicking off a Drupal install.
@@ -72,7 +72,7 @@ Here's an example just running the container and forwarding `localhost:8080`, `l
 
 ### MySQL, PostgreSQL, SQLite and Adminer
 
-Adminer can be used to administer MySQL, PostgreSQL and SQLite databases. Adminer is aliased to the web root at `/adminer.php`.
+[Adminer](http://www.adminer.org/) is a tool that can be used to administer MySQL, PostgreSQL and SQLite databases, contained in a single file of PHP. Adminer is aliased to the web root at `/adminer.php`.
 
 The MySQL port `3306` is exposed. The root account for MySQL is `root` (no password).
 
@@ -80,7 +80,7 @@ The PostgreSQL port `5432` is exposed. The root account for PostgreSQL is `postg
 
 ### Supervisor
 
-Supervisor provides a rudimentary web UI over the port `9001` to manage several of the server processes (Apache, MySQL, PostgreSQL, sshd, Solr). It can be found over http `localhost:9201` in the above example, logging in with the id `supervisor` and the password also `supervisor`.
+[Supervisor](http://supervisord.org/) provides a rudimentary web UI over port `9001` to manage several of the server processes (Apache, MySQL, PostgreSQL, sshd, Solr). It can be found over http `localhost:9201` in the above example, logging in with the id `supervisor` and the password also `supervisor`.
 
 ### Apache Solr
 
