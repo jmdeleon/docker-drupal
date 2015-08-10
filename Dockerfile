@@ -128,6 +128,9 @@ RUN mkdir -p /var/www/sites/default/files && \
 	mkdir /var/www/sites/all/themes/custom && \
 	chown -R www-data:www-data /var/www/
 
+# Setup Node.js build tools
+RUN npm install -g grunt grunt-cli yo bower coffee-script
+
 # Setup Adminer
 RUN mkdir /usr/share/adminer
 RUN wget -c http://www.adminer.org/latest.php -O /usr/share/adminer/adminer.php
