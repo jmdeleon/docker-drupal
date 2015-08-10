@@ -16,9 +16,12 @@ RUN apt-get update && apt-get install -y \
 
 # Install updated Git and Mercurial (hg) from Debian backports repository
 RUN echo "deb http://http.debian.net/debian wheezy-backports main" > /etc/apt/sources.list.d/wheezy-backports.list
-RUN apt-get update -qq && \
-	apt-get -t wheezy-backports install -y -qq git mercurial nodejs-legacy && \
-	curl -L --insecure https://www.npmjs.org/install.sh | bash
+RUN apt-get update -qq && apt-get -t wheezy-backports install -y -qq git mercurial
+
+# Install Node.js
+RUN curl --silent --location https://deb.nodesource.com/setup_0.12 | bash -
+RUN apt-get install --yes nodejs
+RUN curl -L --insecure https://www.npmjs.org/install.sh | bash
 
 # Install updated PHP 5.6 and Apache from dotdeb.org repository
 RUN echo -e '\n\ndeb http://packages.dotdeb.org wheezy all\ndeb-src http://packages.dotdeb.org wheezy all\n\n' >>  /etc/apt/sources.list
