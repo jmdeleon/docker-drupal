@@ -5,6 +5,7 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # Install base packages
 RUN apt-get update && apt-get install -y \
+	build-essential \
 	vim \
 	curl \
 	wget \
@@ -15,7 +16,9 @@ RUN apt-get update && apt-get install -y \
 
 # Install updated Git and Mercurial (hg) from Debian backports repository
 RUN echo "deb http://http.debian.net/debian wheezy-backports main" > /etc/apt/sources.list.d/wheezy-backports.list
-RUN apt-get update -qq && apt-get -t wheezy-backports install -y -qq git mercurial
+RUN apt-get update -qq && \
+	apt-get -t wheezy-backports install -y -qq git mercurial nodejs-legacy && \
+	curl -L --insecure https://www.npmjs.org/install.sh | bash
 
 # Install updated PHP 5.6 and Apache from dotdeb.org repository
 RUN echo -e '\n\ndeb http://packages.dotdeb.org wheezy all\ndeb-src http://packages.dotdeb.org wheezy all\n\n' >>  /etc/apt/sources.list
