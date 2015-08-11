@@ -23,6 +23,13 @@ RUN curl --silent --location https://deb.nodesource.com/setup_0.12 | bash -
 RUN apt-get install --yes nodejs
 RUN curl -L --insecure https://www.npmjs.org/install.sh | bash
 
+# Install MongoDB
+RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
+RUN echo 'deb http://downloads-distro.mongodb.org/repo/debian-sysvinit dist 10gen' | tee /etc/apt/sources.list.d/mongodb.list
+RUN apt-get update
+RUN mkdir -p /data/db
+RUN apt-get install -y adduser mongodb-org-server mongodb-org-shell
+
 # Install updated PHP 5.6 and Apache from dotdeb.org repository
 RUN echo -e '\n\ndeb http://packages.dotdeb.org wheezy all\ndeb-src http://packages.dotdeb.org wheezy all\n\n' >>  /etc/apt/sources.list
 RUN echo -e '\n\ndeb http://packages.dotdeb.org wheezy-php56 all\ndeb-src http://packages.dotdeb.org wheezy-php56 all\n\n' >>  /etc/apt/sources.list
@@ -111,6 +118,8 @@ RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n' >> /etc/supervisor/s
 RUN echo -e '[program:postgresql]\nuser=postgres\nautorestart=true\ncommand=/usr/lib/postgresql/9.4/bin/postgres -D /var/lib/postgresql/9.4/main -c config_file=/etc/postgresql/9.4/main/postgresql.conf\n\n' >> /etc/supervisor/supervisord.conf
 # Setup Supervisor Solr
 RUN echo -e '[program:solr]\ncommand=/usr/bin/java -Xmx512M -server -jar start.jar\ndirectory=/usr/share/solr/example\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
+# Setup Supervisor MongoDB
+RUN echo -e '[program:mongod]\ncommand=/usr/bin/mongod --smallfiles\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 
 # Download Drupal
 RUN rm -rf /var/www
@@ -146,6 +155,9 @@ RUN /etc/init.d/mysql start
 # Start PostgreSQL
 RUN /etc/init.d/postgresql start
 
+# Start MongoDB
+RUN service mongod start
+
 # Setup Solr
 RUN wget -c http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz -O /tmp/solr-4.10.4.tgz
 RUN cd /tmp && tar xzf solr-4.10.4.tgz && mv solr-4.10.4 /usr/share/solr && rm /tmp/solr-4.10.4.tgz
@@ -155,5 +167,5 @@ RUN cd /usr/share/solr/example && /usr/bin/java -Xmx512M -server -jar start.jar 
 # RUN cd /var/www && drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin
 
 # Expose application ports and start Supervisor to manage service applications
-EXPOSE 80 3306 22 5432 8983 9001
+EXPOSE 80 3306 22 5432 8983 9001 27017 28017
 CMD exec supervisord -n
