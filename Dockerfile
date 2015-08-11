@@ -41,6 +41,8 @@ RUN apt-get update && apt-get upgrade && apt-get install -y \
 	mysql-server \
 	mysql-client \
 	php5-fpm \
+	php5-dev \
+	php-pear \
 	php5-cli \
 	php5-mysql \
 	php5-gd \
@@ -108,6 +110,14 @@ RUN sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/ss
 RUN mkdir /var/run/sshd && chmod 0755 /var/run/sshd
 RUN mkdir -p /root/.ssh/ && touch /root/.ssh/authorized_keys
 RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so@g' -i /etc/pam.d/sshd
+
+# Setup PHP support for MongoDB
+RUN echo -e '\n' | pecl install mongo
+RUN echo -e '\nextension = mongo.so\n\n' >> /etc/php5/apache2/php.ini
+
+# Setup PHP support for uploadprogress
+RUN echo -e '\n' | pecl install uploadprogress
+RUN echo -e '\nextension = uploadprogress.so\n\n' >> /etc/php5/apache2/php.ini
 
 # Setup Supervisor
 RUN echo -e '\n[inet_http_server]\nport = *:9001\nusername = supervisor\npassword = supervisor\n\n' >> /etc/supervisor/supervisord.conf
