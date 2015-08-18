@@ -12,6 +12,8 @@ RUN apt-get update && apt-get install -y \
 	nano \
 	openssh-server \
 	openjdk-7-jdk \
+	python-pip \
+	python-virtualenv \
 	supervisor
 
 # Install updated Git and Mercurial (hg) from Debian backports repository
