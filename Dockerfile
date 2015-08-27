@@ -150,7 +150,7 @@ RUN mkdir -p /var/www/sites/default/files && \
 	chown -R www-data:www-data /var/www/
 
 # Setup Node.js build tools
-RUN npm install -g grunt grunt-cli yo bower coffee-script express
+RUN npm install -g grunt grunt-cli yo bower coffee-script express mongodb
 
 # Setup Adminer
 RUN mkdir /usr/share/adminer
