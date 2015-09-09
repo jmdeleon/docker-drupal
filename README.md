@@ -1,7 +1,7 @@
 Drupal development with Docker
 ==============================
 
-Quick and easy to use Docker container for your local Drupal development. It contains a LAMP stack and an SSH server, along with an up to date version of Drush. It is based on [Debian Wheezy](https://wiki.debian.org/DebianWheezy).
+Quick and easy to use Docker container for your local Drupal development. It contains a LAMP stack and an SSH server, along with an up to date version of Drush. It is based on [Debian Jessie](https://wiki.debian.org/DebianJessie).
 
 Summary
 -------
@@ -25,7 +25,6 @@ When launched, the container will contain a ready-to-install Drupal distribution
 
 ### Passwords
 
-* Drupal: `admin:admin`
 * MySQL: `root:` (no password)
 * PostgreSQL: `postgres:postgres`
 * SSH: `root:root`
@@ -68,7 +67,7 @@ The container exposes its `80` port (Apache), its `3306` port (MySQL), its `5432
 
 Here's an example just running the container and forwarding `localhost:8080`, `localhost:2222`, `localhost:8984`, `localhost:9291` to the container:
 
-	docker run --rm --name youralias -p 8080:80 -p 2222:22 -p 8984:8983 -p 9201:9001 yourname/drupal
+	docker run --rm -t -i --name youralias -p 8080:80 -p 2222:22 -p 8984:8983 -p 9201:9001 yourname/drupal
 
 ### MySQL, PostgreSQL, SQLite and Adminer
 
