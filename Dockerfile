@@ -154,7 +154,7 @@ RUN wget -c http://www.adminer.org/latest.php -O /usr/share/adminer/adminer.php
 RUN echo -e '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
 RUN echo -e 'Alias /php-info.php /usr/share/adminer/php-info.php' > /etc/apache2/mods-available/adminer.load
 RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/mods-available/adminer.load
-RUN a2enmod alias auth_basic auth_digest authn_file authz_default authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires fcgid headers include mime negotiation php5 proxy proxy_html proxy_http python reqtimeout rewrite setenvif speling ssl status suexec wsgi
+RUN a2enmod alias auth_basic auth_digest authn_file authz_default authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires fcgid headers include mime negotiation php5 proxy proxy_html proxy_http python reqtimeout rewrite setenvif speling ssl status suexec adminer
 RUN service apache2 restart
 
 # Start MySQL
