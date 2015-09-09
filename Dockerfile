@@ -130,20 +130,20 @@ RUN echo -e '[program:solr]\ncommand=/usr/bin/java -Xmx512M -server -jar start.j
 RUN echo -e '[program:mongod]\ncommand=/usr/bin/mongod --smallfiles\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 
 # Download Drupal
-RUN rm -rf /var/www
+RUN rm -rf /var/www/html
 RUN cd /var && \
 # Download the Web Experience Toolkit Drupal distribution
-	drush dl wetkit-7.x-4.x-dev && mv /var/wetkit* /var/www
+	drush dl wetkit-7.x-4.x-dev && mv /var/wetkit* /var/www/html
 # Replace the line above with the line below to download the stock Drupal core distribution
-#	drush dl drupal && mv /var/drupal* /var/www
-RUN mkdir -p /var/www/sites/default/files && \
-	chmod a+w /var/www/sites -R && \
-	mkdir /var/www/sites/all/modules/contrib -p && \
-	mkdir /var/www/sites/all/modules/custom && \
-	mkdir /var/www/sites/all/modules/features && \
-	mkdir /var/www/sites/all/themes/contrib -p && \
-	mkdir /var/www/sites/all/themes/custom && \
-	chown -R www-data:www-data /var/www/
+#	drush dl drupal && mv /var/drupal* /var/www/html
+RUN mkdir -p /var/www/html/sites/default/files && \
+	chmod a+w /var/www/html/sites -R && \
+	mkdir /var/www/html/sites/all/modules/contrib -p && \
+	mkdir /var/www/html/sites/all/modules/custom && \
+	mkdir /var/www/html/sites/all/modules/features && \
+	mkdir /var/www/html/sites/all/themes/contrib -p && \
+	mkdir /var/www/html/sites/all/themes/custom && \
+	chown -R www-data:www-data /var/www/html
 
 # Setup Node.js build tools
 RUN npm install -g grunt grunt-cli yo bower coffee-script express mongodb pg mysql
@@ -154,7 +154,7 @@ RUN wget -c http://www.adminer.org/latest.php -O /usr/share/adminer/adminer.php
 RUN echo -e '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
 RUN echo -e 'Alias /php-info.php /usr/share/adminer/php-info.php' > /etc/apache2/mods-available/adminer.load
 RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/mods-available/adminer.load
-RUN a2enmod alias auth_basic auth_digest authn_file authz_default authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires fcgid headers include mime negotiation php5 proxy proxy_html proxy_http python reqtimeout rewrite setenvif speling ssl status suexec adminer
+RUN a2enmod alias auth_basic auth_digest authn_file authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires headers include mime negotiation php5 proxy proxy_html proxy_http reqtimeout rewrite setenvif speling ssl status suexec adminer
 RUN service apache2 restart
 
 # Start MySQL
@@ -172,7 +172,7 @@ RUN cd /tmp && tar xzf solr-4.10.4.tgz && mv solr-4.10.4 /usr/share/solr && rm /
 RUN cd /usr/share/solr/example && /usr/bin/java -Xmx512M -server -jar start.jar &
 
 # Install Drupal
-# RUN cd /var/www && drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin
+# RUN cd /var/www/html && drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin
 
 # Expose application ports and start Supervisor to manage service applications
 EXPOSE 80 3306 22 5432 8983 9001 27017 28017
