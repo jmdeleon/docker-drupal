@@ -1,4 +1,4 @@
-FROM debian:wheezy
+FROM debian:jessie
 MAINTAINER Jose de Leon <jose_de_leon@hotmail.com>
 ENV DEBIAN_FRONTEND noninteractive
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -14,11 +14,9 @@ RUN apt-get update && apt-get install -y \
 	openjdk-7-jdk \
 	python-pip \
 	python-virtualenv \
+	git \
+	mercurial \
 	supervisor
-
-# Install updated Git and Mercurial (hg) from Debian backports repository
-RUN echo "deb http://http.debian.net/debian wheezy-backports main" > /etc/apt/sources.list.d/wheezy-backports.list
-RUN apt-get update -qq && apt-get -t wheezy-backports install -y -qq git mercurial
 
 # Install Node.js
 RUN curl --silent --location https://deb.nodesource.com/setup_4.x | bash -
@@ -33,8 +31,7 @@ RUN mkdir -p /data/db
 RUN apt-get install -y adduser mongodb-org-server mongodb-org-shell
 
 # Install updated PHP 5.6 and Apache from dotdeb.org repository
-RUN echo -e '\n\ndeb http://packages.dotdeb.org wheezy all\ndeb-src http://packages.dotdeb.org wheezy all\n\n' >>  /etc/apt/sources.list
-RUN echo -e '\n\ndeb http://packages.dotdeb.org wheezy-php56 all\ndeb-src http://packages.dotdeb.org wheezy-php56 all\n\n' >>  /etc/apt/sources.list
+RUN echo -e '\n\ndeb http://packages.dotdeb.org jessie all\ndeb-src http://packages.dotdeb.org jessie all\n\n' >>  /etc/apt/sources.list
 RUN wget --quiet -O - https://www.dotdeb.org/dotdeb.gpg | apt-key add -
 RUN apt-get update && apt-get upgrade && apt-get install -y \
 	apache2 \
@@ -52,7 +49,7 @@ RUN apt-get update && apt-get upgrade && apt-get install -y \
 	php5-sqlite
 
 # Install PostgreSQL 9.4 from PostgreSQL repository 
-RUN echo -e '\n\ndeb http://apt.postgresql.org/pub/repos/apt/ wheezy-pgdg main\n\n' >>  /etc/apt/sources.list
+RUN echo -e '\n\ndeb http://apt.postgresql.org/pub/repos/apt/ jessie-pgdg main\n\n' >>  /etc/apt/sources.list
 RUN apt-get -y install ca-certificates
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 RUN apt-get update && apt-get upgrade && apt-get install -y postgresql-9.4 postgresql-client php5-pgsql
@@ -83,10 +80,9 @@ RUN sed -i 's/;date.timezone =/date.timezone = "UTC"/' /etc/php5/apache2/php.ini
 # In order to run our Simpletest tests, we need to make Apache
 # listen on the same port as the one we forwarded. Because we use
 # 8080 by default, we set it up for that port.
-RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/sites-available/default
+RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 RUN echo "Listen 8080" >> /etc/apache2/ports.conf
-RUN sed -i 's/VirtualHost *:80/VirtualHost */' /etc/apache2/sites-available/default
-RUN echo -e '*\n' | a2enmod
+RUN sed -i 's/VirtualHost *:80/VirtualHost */' /etc/apache2/sites-available/000-default.conf
 
 # Setup MySQL, bind on all addresses
 RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/' /etc/mysql/my.cnf
@@ -150,7 +146,7 @@ RUN mkdir -p /var/www/sites/default/files && \
 	chown -R www-data:www-data /var/www/
 
 # Setup Node.js build tools
-RUN npm install -g grunt grunt-cli yo bower coffee-script express mongodb pg mysql sqlite3
+RUN npm install -g grunt grunt-cli yo bower coffee-script express mongodb pg mysql
 
 # Setup Adminer
 RUN mkdir /usr/share/adminer
@@ -158,7 +154,7 @@ RUN wget -c http://www.adminer.org/latest.php -O /usr/share/adminer/adminer.php
 RUN echo -e '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
 RUN echo -e 'Alias /php-info.php /usr/share/adminer/php-info.php' > /etc/apache2/mods-available/adminer.load
 RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/mods-available/adminer.load
-RUN echo -e '*\n' | a2enmod
+RUN a2enmod alias autoindex deflate expires headers include info php5 rewrite adminer
 RUN service apache2 restart
 
 # Start MySQL
