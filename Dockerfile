@@ -21,7 +21,7 @@ RUN echo "deb http://http.debian.net/debian wheezy-backports main" > /etc/apt/so
 RUN apt-get update -qq && apt-get -t wheezy-backports install -y -qq git mercurial
 
 # Install Node.js
-RUN curl --silent --location https://deb.nodesource.com/setup_0.12 | bash -
+RUN curl --silent --location https://deb.nodesource.com/setup_4.x | bash -
 RUN apt-get install --yes nodejs
 RUN curl -L --insecure https://www.npmjs.org/install.sh | bash
 
