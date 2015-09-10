@@ -120,14 +120,14 @@ RUN echo -e '\nextension = uploadprogress.so\n\n' >> /etc/php5/apache2/php.ini
 # Setup Supervisor
 RUN echo -e '\n[inet_http_server]\nport = *:9001\nusername = supervisor\npassword = supervisor\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:apache2]\ncommand=/usr/bin/pidproxy /var/run/apache2/apache2.pid /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"\nautostart=true\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
-RUN echo -e '[program:mysql]\ncommand=/usr/bin/pidproxy /var/run/mysqld/mysqld.pid /usr/sbin/mysqld\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
-RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:mysql]\ncommand=/usr/bin/pidproxy /var/run/mysqld/mysqld.pid /usr/sbin/mysqld\nautostart=true\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\nautostart=true\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 # Setup Supervisor PostgreSQL
-RUN echo -e '[program:postgresql]\nuser=postgres\nautorestart=true\ncommand=/usr/lib/postgresql/9.4/bin/postgres -D /var/lib/postgresql/9.4/main -c config_file=/etc/postgresql/9.4/main/postgresql.conf\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:postgresql]\nuser=postgres\nautorestart=true\ncommand=/usr/lib/postgresql/9.4/bin/postgres -D /var/lib/postgresql/9.4/main -c config_file=/etc/postgresql/9.4/main/postgresql.conf\nautostart=true\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 # Setup Supervisor Solr
-RUN echo -e '[program:solr]\ncommand=/usr/bin/java -Xmx512M -server -jar start.jar\ndirectory=/usr/share/solr/example\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:solr]\ncommand=/usr/bin/java -Xmx512M -server -jar start.jar\ndirectory=/usr/share/solr/example\nautostart=true\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 # Setup Supervisor MongoDB
-RUN echo -e '[program:mongod]\ncommand=/usr/bin/mongod --smallfiles\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:mongod]\ncommand=/usr/bin/mongod --smallfiles\nautostart=true\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 
 # Download Drupal
 RUN rm -rf /var/www/html
@@ -155,21 +155,10 @@ RUN echo -e '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
 RUN echo -e 'Alias /php-info.php /usr/share/adminer/php-info.php' > /etc/apache2/mods-available/adminer.load
 RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/mods-available/adminer.load
 RUN a2enmod alias auth_basic auth_digest authn_file authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires headers include mime negotiation php5 proxy proxy_html proxy_http reqtimeout rewrite setenvif speling ssl status suexec adminer
-# RUN service apache2 restart
-
-# Start MySQL
-RUN /etc/init.d/mysql start
-
-# Start PostgreSQL
-RUN /etc/init.d/postgresql start
-
-# Start MongoDB
-RUN service mongod start
 
 # Setup Solr
 RUN wget -c http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz -O /tmp/solr-4.10.4.tgz
 RUN cd /tmp && tar xzf solr-4.10.4.tgz && mv solr-4.10.4 /usr/share/solr && rm /tmp/solr-4.10.4.tgz
-RUN cd /usr/share/solr/example && /usr/bin/java -Xmx512M -server -jar start.jar &
 
 # Install Drupal
 # RUN cd /var/www/html && drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin
