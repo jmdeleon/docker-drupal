@@ -119,7 +119,7 @@ RUN echo -e '\nextension = uploadprogress.so\n\n' >> /etc/php5/apache2/php.ini
 
 # Setup Supervisor
 RUN echo -e '\n[inet_http_server]\nport = *:9001\nusername = supervisor\npassword = supervisor\n\n' >> /etc/supervisor/supervisord.conf
-RUN echo -e '[program:apache2]\ncommand=/usr/bin/pidproxy /var/run/apache2/apache2.pid /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:apache2]\ncommand=/usr/bin/pidproxy /var/run/apache2/apache2.pid /bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"\nautostart=true\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:mysql]\ncommand=/usr/bin/pidproxy /var/run/mysqld/mysqld.pid /usr/sbin/mysqld\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n' >> /etc/supervisor/supervisord.conf
 # Setup Supervisor PostgreSQL
@@ -155,7 +155,7 @@ RUN echo -e '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
 RUN echo -e 'Alias /php-info.php /usr/share/adminer/php-info.php' > /etc/apache2/mods-available/adminer.load
 RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/mods-available/adminer.load
 RUN a2enmod alias auth_basic auth_digest authn_file authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires headers include mime negotiation php5 proxy proxy_html proxy_http reqtimeout rewrite setenvif speling ssl status suexec adminer
-RUN service apache2 restart
+# RUN service apache2 restart
 
 # Start MySQL
 RUN /etc/init.d/mysql start
