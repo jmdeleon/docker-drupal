@@ -8,10 +8,10 @@ Summary
 
 This image contains:
 
-* Apache 2.2
+* Apache 2.4
 * MySQL 5.6
 * PostgreSQL 9.4
-* SQLite 3.7
+* SQLite 3.8
 * PHP 5.6
 * Drupal 7.x, [Web Experience Toolkit distribution](https://www.drupal.org/project/wetkit) 4.0, development edition (optionally supports current Drupal)
 * [Composer](https://getcomposer.org/)
