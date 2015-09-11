@@ -165,4 +165,5 @@ RUN cd /tmp && tar xzf solr-4.10.4.tgz && mv solr-4.10.4 /usr/share/solr && rm /
 
 # Expose application ports and start Supervisor to manage service applications
 EXPOSE 80 3306 22 5432 8983 9001 27017 28017
-CMD exec supervisord -n
+CMD exec supervisord -n -c /etc/supervisor/supervisord.conf
+
