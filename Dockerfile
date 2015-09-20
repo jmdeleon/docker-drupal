@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
 	python-pip \
 	python-virtualenv \
 	golang \
-	lus5.2 \
+	lua5.2 \
 	git \
 	mercurial \
 	supervisor
