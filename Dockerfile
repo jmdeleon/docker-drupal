@@ -12,8 +12,10 @@ RUN apt-get update && apt-get install -y \
 	nano \
 	openssh-server \
 	openjdk-7-jdk \
+	ruby ruby-dev ri \
 	python-pip \
 	python-virtualenv \
+	golang \
 	git \
 	mercurial \
 	supervisor
@@ -147,6 +149,9 @@ RUN mkdir -p /var/www/html/sites/default/files && \
 
 # Setup Node.js build tools
 RUN npm install -g grunt grunt-cli yo bower coffee-script express mongodb pg mysql
+
+# Setup Ruby Rake, Bundle, SASS, and Compass gems
+RUN gem install rake bundler sass compass
 
 # Setup Adminer
 RUN mkdir /usr/share/adminer
