@@ -57,6 +57,12 @@ RUN apt-get -y install ca-certificates
 RUN wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -
 RUN apt-get update && apt-get upgrade && apt-get install -y postgresql-9.4 postgresql-client php5-pgsql
 
+# Install Phusion Passenger + Apache module through Phusion's APT repository.
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 561F9B9CAC40B2F7
+RUN apt-get install -y apt-transport-https ca-certificates
+RUN sh -c 'echo deb https://oss-binaries.phusionpassenger.com/apt/passenger jessie main > /etc/apt/sources.list.d/passenger.list'
+RUN apt-get update && apt-get install -y libapache2-mod-passenger
+
 RUN apt-get autoremove && apt-get clean
 
 # Install Composer
@@ -152,7 +158,7 @@ RUN mkdir -p /var/www/html/sites/default/files && \
 RUN npm install -g grunt grunt-cli yo bower coffee-script express mongodb pg mysql node-gyp sqlite3
 
 # Setup Ruby Rake, Bundle, SASS, and Compass gems
-RUN gem install rake bundler sass compass
+RUN gem install rake bundler sass compass rails
 
 # Setup Adminer
 RUN mkdir /usr/share/adminer
@@ -160,7 +166,8 @@ RUN wget -c http://www.adminer.org/latest.php -O /usr/share/adminer/adminer.php
 RUN echo -e '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
 RUN echo -e 'Alias /php-info.php /usr/share/adminer/php-info.php' > /etc/apache2/mods-available/adminer.load
 RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/mods-available/adminer.load
-RUN a2enmod alias auth_basic auth_digest authn_file authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires headers include mime negotiation php5 proxy proxy_html proxy_http reqtimeout rewrite setenvif speling ssl status suexec adminer
+
+RUN a2enmod alias auth_basic auth_digest authn_file authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires headers include mime negotiation php5 proxy proxy_html proxy_http reqtimeout rewrite setenvif speling ssl status suexec passenger adminer
 
 # Setup Solr
 RUN wget -c http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz -O /tmp/solr-4.10.4.tgz
