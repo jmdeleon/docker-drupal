@@ -38,6 +38,7 @@ RUN echo -e '\n\ndeb http://packages.dotdeb.org jessie all\ndeb-src http://packa
 RUN wget --quiet -O - https://www.dotdeb.org/dotdeb.gpg | apt-key add -
 RUN apt-get update && apt-get upgrade && apt-get install -y \
 	apache2 \
+	apache2-dev \
 	sqlite3 \
 	libapache2-mod-php5 \
 	mysql-server \
@@ -167,7 +168,7 @@ RUN echo -e '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
 RUN echo -e 'Alias /php-info.php /usr/share/adminer/php-info.php' > /etc/apache2/mods-available/adminer.load
 RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/mods-available/adminer.load
 
-RUN a2enmod alias auth_basic auth_digest authn_file authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires headers include mime negotiation php5 proxy proxy_html proxy_http reqtimeout rewrite setenvif speling ssl status suexec passenger adminer
+RUN a2enmod alias auth_basic auth_digest authn_file authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires headers include mime negotiation php5 proxy proxy_html proxy_http paasenger reqtimeout rewrite setenvif speling ssl status suexec apt-get install xml2enc adminer
 
 # Setup Solr
 RUN wget -c http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz -O /tmp/solr-4.10.4.tgz
