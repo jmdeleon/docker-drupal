@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
 	curl \
 	wget \
 	nano \
+	unzip \
 	openssh-server \
 	openjdk-7-jdk \
 	ruby ruby-dev ri \
@@ -31,7 +32,7 @@ RUN apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10
 RUN echo 'deb http://downloads-distro.mongodb.org/repo/debian-sysvinit dist 10gen' | tee /etc/apt/sources.list.d/mongodb.list
 RUN apt-get update
 RUN mkdir -p /data/db
-RUN apt-get install -y libkrb5-dev libreadline-dev adduser mongodb-org-server mongodb-org-shell
+RUN apt-get install -y libkrb5-dev libreadline-dev adduser mongodb-org-server mongodb-org-shell mongodb-clients
 
 # Install updated PHP 5.6 and Apache from dotdeb.org repository
 RUN echo -e '\n\ndeb http://packages.dotdeb.org jessie all\ndeb-src http://packages.dotdeb.org jessie all\n\n' >>  /etc/apt/sources.list
@@ -156,7 +157,7 @@ RUN mkdir -p /var/www/html/sites/default/files && \
 	chown -R www-data:www-data /var/www/html
 
 # Setup Node.js build tools
-RUN npm install -g grunt grunt-cli yo bower coffee-script express mongodb pg mysql node-gyp sqlite3
+RUN npm install -g grunt grunt-cli yo bower coffee-script express mongodb pg mysql node-gyp sqlite3 consolidate
 
 # Setup Ruby Rake, Bundle, SASS, and Compass gems
 RUN gem install rake bundler sass compass rails
