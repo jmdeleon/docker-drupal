@@ -10,7 +10,7 @@ RUN apt-get update && apt-get install -y \
 	curl \
 	wget \
 	nano \
-	unzip \
+	zip unzip \
 	openssh-server \
 	openjdk-7-jdk \
 	ruby ruby-dev ri \
@@ -18,6 +18,7 @@ RUN apt-get update && apt-get install -y \
 	python-virtualenv \
 	golang \
 	lua5.2 \
+	open-cobol \
 	git \
 	mercurial \
 	supervisor
@@ -157,14 +158,14 @@ RUN mkdir -p /var/www/html/sites/default/files && \
 	chown -R www-data:www-data /var/www/html
 
 # Setup Node.js build tools
-RUN npm install -g grunt grunt-cli yo bower coffee-script express mongodb pg mysql node-gyp sqlite3 consolidate swig
+RUN npm install -g grunt grunt-cli yo bower coffee-script cobol express mongodb pg mysql node-gyp sqlite3 consolidate swig
 
 # Setup Ruby Rake, Bundle, SASS, and Compass gems
 RUN gem install rake bundler sass compass rails
 
 # Setup Adminer
 RUN mkdir /usr/share/adminer
-RUN wget -c http://www.adminer.org/latest.php -O /usr/share/adminer/adminer.php
+RUN wget --quiet -c http://www.adminer.org/latest.php -O /usr/share/adminer/adminer.php
 RUN echo -e '<?php phpinfo(); ?>' >> /usr/share/adminer/php-info.php
 RUN echo -e 'Alias /php-info.php /usr/share/adminer/php-info.php' > /etc/apache2/mods-available/adminer.load
 RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/mods-available/adminer.load
@@ -172,7 +173,7 @@ RUN echo -e 'Alias /adminer.php /usr/share/adminer/adminer.php' >> /etc/apache2/
 RUN a2enmod alias auth_basic auth_digest authn_file authz_groupfile authz_host authz_user autoindex cgi dav dav_fs dbd deflate dir env expires headers include mime negotiation php5 proxy proxy_html proxy_http passenger reqtimeout rewrite setenvif speling ssl status suexec xml2enc adminer
 
 # Setup Solr
-RUN wget -c http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz -O /tmp/solr-4.10.4.tgz
+RUN wget -nv -c http://archive.apache.org/dist/lucene/solr/4.10.4/solr-4.10.4.tgz -O /tmp/solr-4.10.4.tgz
 RUN cd /tmp && tar xzf solr-4.10.4.tgz && mv solr-4.10.4 /usr/share/solr && rm /tmp/solr-4.10.4.tgz
 
 # Install Drupal
