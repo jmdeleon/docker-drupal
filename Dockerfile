@@ -158,7 +158,7 @@ RUN mkdir -p /var/www/html/sites/default/files && \
 	chown -R www-data:www-data /var/www/html
 
 # Setup Node.js build tools
-RUN npm install -g grunt grunt-cli yo bower coffee-script cobol express mongodb pg mysql node-gyp sqlite3 consolidate swig mongoose
+RUN npm install -g grunt grunt-cli yo bower coffee-script cobol nativescript express mongodb pg mysql node-gyp sqlite3 consolidate swig mongoose
 
 # Setup Ruby Rake, Bundle, SASS, and Compass gems
 RUN gem install rake bundler sass compass rails
